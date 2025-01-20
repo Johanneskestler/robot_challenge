@@ -1,84 +1,94 @@
-# UR_Facetracking
+# 330.328 VU 2024W Robot Challenge
 
-- [UR_Facetracking](#ur_facetracking)
-  - [Demonstration](#demonstration)
-  - [Usage](#usage)
-      - [Settings](#settings)
-  - [Explanation](#explanation)
-  - [Requirements](#requirements)
-  - [Notes](#notes)
+## Authors: 
 
-Currently under developement as of 2021-03-14
+- [Kilian Kliegel](https://github.com/KilianK2)
+- [Johannes Kestler](https://github.com/Johanneskestler)
 
-Code is a bit of a mess **Use at your own risk**. 
+## Description
 
+In this project we aimed to implement flexible workspace specification in a industrial grinding task using a cobot.
 
- Universal Robot Realtime Facetracking with Python3 and OpenCV
- Uses the [UR - RTDE](https://www.universal-robots.com/how-tos-and-faqs/how-to/ur-how-tos/real-time-data-exchange-rtde-guide-22229/)- protocol to send continuous updates to a Robot for smooth continued motion.
+The cobot used is the UR3e.
 
-## Demonstration
-https://youtu.be/HHb-5dZoPFQ
+The Code allows for gesture Control for a selection of 3 different tools and precise workspace specification using a 
+simple RBG webcam.
 
-[![Universal Robot Realtime Face Tracking Python](UR_Facetracking_Demo.jpg)](https://youtu.be/HHb-5dZoPFQ)
+![Gestures](images/Gestures.png)
 
-## Usage
+Additionally a GUI based workflow has been implemented as a comparison baseline
 
-Run `Face_tracking01.py` to run the face tracking.
-Developed for a Universal Robot UR5 CB running Polyscope 3.7
+![GUI](images/GUI.png)
 
-#### Settings
+## Settings
 
-[ `robot_startposition`: ](https://github.com/robin-gdwl/UR_Facetracking/blob/95e271c1da55890cefa2645afeca3ea63f622a54/Face_tracking01.py#L35) The joint angles of the robot at the beginning.  
-[`max_x , max_y `: ](https://github.com/robin-gdwl/UR_Facetracking/blob/95e271c1da55890cefa2645afeca3ea63f622a54/Face_tracking01.py#L53) The maximum horizontal distance the robot can travel.  
-[`hor_rot_max, ver_rot_max`: ](https://github.com/robin-gdwl/UR_Facetracking/blob/95e271c1da55890cefa2645afeca3ea63f622a54/Face_tracking01.py#L55)Maximum Rotation of the robot at the edge of the view-window defined by `max_x` and `max_y`.  
-[`m_per_pixel`](https://github.com/robin-gdwl/UR_Facetracking/blob/95e271c1da55890cefa2645afeca3ea63f622a54/Face_tracking01.py#L51): Distance (in meters) the robot will move to get to the position of the face in the captured image.  
+### Operating System
 
-## Explanation
+To run this repository we recommend a native Ubuntu 22.04 installation. 
 
-https://youtu.be/9XCNE0BmtUg
+### Dependencies
+#### Hardware Requirements
+- UR3e Robot
+- Robotiq Gripper
+- Webcam (for gesture tracking)
 
-[![Universal Robot Realtime Face Tracking Python](UR_Facetracking_Explanation.png)](https://youtu.be/9XCNE0BmtUg)
+#### Software Requirements
+- Python 3.8 or higher
+- Network connection to the robot (configured IP: 192.168.56.101)
 
-The explanation is not comprehensive yet. A better Video is planned.  
-___
+#### Python Packages
+```bash
+rtde_control>=2.0.0
+rtde_receive>=2.0.0
+robotiq-gripper-controller>=1.0.0
+numpy>=1.21.0
+opencv-python>=4.5.0
+mediapipe>=0.8.9
+```
 
-## Requirements
+#### Setup Instructions
+1. Install Python requirements using pip:
+```bash
+pip install -r requirements.txt
+```
 
-Universal Robot or [URsim-software](https://www.universal-robots.com/download/?option=45440#section16597) (tested with UR5cb running polyscope 3.7)
+2. Robot Setup:
+- Ensure the robot is connected to the network
+- Verify the robot IP address (default: 192.168.56.101)
+- Robot should be in remote control mode
 
-python 3.x
+3. Gripper Setup:
+- Connect the Robotiq gripper to the UR3e
+- Ensure the gripper is properly configured in the robot settings
 
-**Python libraries:**  
-[opencv-python 4.1.2.30](https://pypi.org/project/opencv-python/)   
-[numpy 1.18.1](https://numpy.org/)  
-[math3d 3.3.5](https://gitlab.com/morlin/pymath3d)   
-[imutils 0.5.3](https://github.com/jrosebr1/imutils)  
-[six 1.15.0](https://pypi.org/project/six/)
+#### Running the Application
+There are two ways to control the robot:
 
-when used with a raspberry pi and picam:  
-[picamera](https://picamera.readthedocs.io/en/release-1.13/)  
-...  
-___
+1. Gesture Control:
+```bash
+python gesture_controller.py
+```
+This starts the gesture recognition interface. Use hand gestures to:
+- Select tools with thumb gestures (1-3 fingers)
+- Define workspace points with pointing gestures
+- Confirm selections with thumbs up
 
-## Notes
+2. GUI Control:
+```bash
+python terminal_controller.py
+```
+This starts the graphical user interface where you can:
+- Select tools via buttons
+- Define workspace points using mouse clicks
+- Control the robot through menu options
 
-When using a linnux distribution or raspberry pi the software will try to use a picamera. If you want to use a webcam instead change it [here](https://github.com/robin-gdwl/UR_Facetracking/blob/master/Face_tracking01.py#L26).
+### Additonal Ressources
 
-heavily relies on this repository:
-https://github.com/Mandelbr0t/UniversalRobot-RealtimeControl
-which builds ontop of:
-https://bitbucket.org/RopeRobotics/ur-interface/src/master/
+To run this code you need to download 'gesture_recognizer.task' from mediapipe and place it into the project folder
 
-License: GPLv3
-___
+## Sources
 
-TODO
-- [ ] more testing
-- [x] demonstration video
-- [x] explanation video  (not the best explanation so far)
-- [ ] License clarification
-- [x] cleanup
-- [ ] refactoring
-- [ ] documentation
-- [x] comments
-- [x] add links to libraries and other resources
+This project built on top of this repository: https://github.com/robin-gdwl/UR_Facetracking
+
+Furthermore we utilized mediapipe hands: https://ai.google.dev/edge/mediapipe/solutions/vision/gesture_recognizer?hl=de
+
