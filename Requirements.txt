@@ -1,0 +1,9 @@
+certifi
+imutils
+math3d
+numpy>=1.21.0
+opencv-python>=4.7.0
+six
+wincertstore
+mediapipe>=0.10.0
+
